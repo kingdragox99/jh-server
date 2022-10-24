@@ -60,6 +60,51 @@ router.get("/getAll", async (req, res) => {
   }
 });
 
+router.get("/drawing", async (req, res) => {
+  try {
+    const data = await Model.find({ type: "Drawing" });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/engraving", async (req, res) => {
+  try {
+    const data = await Model.find({ type: "Engraving" });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/painting", async (req, res) => {
+  try {
+    const data = await Model.find({ type: "Painting" });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/photography", async (req, res) => {
+  try {
+    const data = await Model.find({ type: "Photography" });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/event", async (req, res) => {
+  try {
+    const data = await Model.find({ type: "Event" });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //Get by ID Method
 router.get("/getOne/:id", async (req, res) => {
   try {
