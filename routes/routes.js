@@ -2,6 +2,7 @@ const express = require("express");
 var fs = require("fs");
 var path = require("path");
 const Model = require("../models/model");
+require("dotenv").config();
 
 const router = express.Router();
 
@@ -19,12 +20,48 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 router.get("/admin", (req, res) => {
-  Model.find({}, (err, items) => {
+  if (req.session.user) {
+    Model.find({}, (err, items) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("An error occurred", err);
+      } else {
+        res.render("home", { items: items, user: req.session.user });
+      }
+    });
+  } else {
+    res.render("login", { error: "Please login before" });
+  }
+});
+
+const tophidden = {
+  email: process.env.EMAIL,
+  password: process.env.PASSWORD,
+};
+
+router.get("/login", (req, res) => {
+  res.render("login", { error: null });
+});
+
+router.post("/login", (req, res) => {
+  if (
+    req.body.email == tophidden.email &&
+    req.body.password == tophidden.password
+  ) {
+    req.session.user = req.body.email;
+    res.redirect("/api/admin");
+  } else {
+    res.render("login", { error: "Bad password or Email" });
+  }
+});
+
+router.get("/logout", (req, res) => {
+  req.session.destroy(function (err) {
     if (err) {
       console.log(err);
-      res.status(500).send("An error occurred", err);
+      res.send("error");
     } else {
-      res.render("home", { items: items });
+      res.render("login", { error: "you are logout" });
     }
   });
 });

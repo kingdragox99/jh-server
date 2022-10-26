@@ -13,10 +13,16 @@
   </head>
 
   <body>
-    <header class="p-3">
-      <h1 class="text-center">Admin Pages</h1>
+    <header class="container p-3">
+      <h1 class="text-center py-3">Admin Pages</h1>
+      <div class="d-flex flex-wrap justify-content-center align-items-center">
+        <h5 class="mr-3">Hi Joyce</h5>
+        <a href="/api/logout" type="button" class="btn btn-primary mx-2"
+          >logout</a
+        >
+      </div>
     </header>
-    <main>
+    <main class="p-4">
       <div class="container px-4">
         <form action="/api/post" method="POST" enctype="multipart/form-data">
           <div class="form-group mb-3">
@@ -162,7 +168,10 @@
       class="mt-5 text-center text-white"
       style="background-color: #303030"
     >
-      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      <div
+        class="text-center p-3 fixed-bottom"
+        style="background-color: rgb(51, 51, 51)"
+      >
         © 2022 Copyright :
         <a class="text-white" href="https://www.linkedin.com/in/arthur-lefevre/"
           >Made By Arthur LEFEVRE</a
