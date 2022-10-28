@@ -80,9 +80,7 @@ router.post("/post", limiter, upload.single("image"), (req, res, next) => {
     desc: req.body.desc,
     type: req.body.type,
     img: {
-      data: path.join(
-        req.protocol + "://" + req.get("host") + "/img/" + req.file.filename
-      ),
+      data: path.join("/img/" + req.file.filename),
       contentType: "image/jpg",
     },
   };
