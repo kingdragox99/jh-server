@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 const session = require("express-session");
+const routesApi = require("./routes/routesApi");
+const routersPublic = require("./routes/routesPublic");
+var history = require("connect-history-api-fallback");
 
 const app = express();
 app.use(
@@ -17,7 +20,7 @@ app.use(bodyParser.json());
 
 app.use(
   session({
-    secret: "mIa G0d 0G4rd",
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
   })
@@ -29,9 +32,8 @@ const mongoString = process.env.DATABASE_URL;
 mongoose.connect(mongoString);
 const database = mongoose.connection;
 
-const routes = require("./routes/routes");
-
-app.use("/api", routes);
+app.use("/api", routesApi);
+app.use("/", routersPublic);
 
 database.on("error", (error) => {
   console.log(error);
@@ -40,6 +42,8 @@ database.on("error", (error) => {
 database.once("connected", () => {
   console.log("Database Connected");
 });
+
+app.use(history());
 
 app.use(express.static("public"));
 app.use("/img", express.static(__dirname + "/img"));

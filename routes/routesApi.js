@@ -1,8 +1,16 @@
 const express = require("express");
-var fs = require("fs");
 var path = require("path");
 const Model = require("../models/model");
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: "DDOS protect, to many try your ip is temporary ban",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const router = express.Router();
 
@@ -19,7 +27,7 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-router.get("/admin", (req, res) => {
+router.get("/admin", limiter, (req, res) => {
   if (req.session.user) {
     Model.find({}, (err, items) => {
       if (err) {
@@ -39,7 +47,7 @@ const tophidden = {
   password: process.env.PASSWORD,
 };
 
-router.get("/login", (req, res) => {
+router.get("/login", limiter, (req, res) => {
   res.render("login", { error: null });
 });
 
@@ -55,7 +63,7 @@ router.post("/login", (req, res) => {
   }
 });
 
-router.get("/logout", (req, res) => {
+router.get("/logout", limiter, (req, res) => {
   req.session.destroy(function (err) {
     if (err) {
       console.log(err);
@@ -66,7 +74,7 @@ router.get("/logout", (req, res) => {
   });
 });
 
-router.post("/post", upload.single("image"), (req, res, next) => {
+router.post("/post", limiter, upload.single("image"), (req, res, next) => {
   var obj = {
     name: req.body.name,
     desc: req.body.desc,
@@ -88,7 +96,7 @@ router.post("/post", upload.single("image"), (req, res, next) => {
 });
 
 //Get all Method
-router.get("/getAll", async (req, res) => {
+router.get("/getAll", limiter, async (req, res) => {
   try {
     const data = await Model.find();
     res.json(data);
@@ -106,7 +114,7 @@ router.get("/drawing", async (req, res) => {
   }
 });
 
-router.get("/engraving", async (req, res) => {
+router.get("/engraving", limiter, async (req, res) => {
   try {
     const data = await Model.find({ type: "Engraving" });
     res.json(data);
@@ -115,7 +123,7 @@ router.get("/engraving", async (req, res) => {
   }
 });
 
-router.get("/painting", async (req, res) => {
+router.get("/painting", limiter, async (req, res) => {
   try {
     const data = await Model.find({ type: "Painting" });
     res.json(data);
@@ -124,7 +132,7 @@ router.get("/painting", async (req, res) => {
   }
 });
 
-router.get("/photography", async (req, res) => {
+router.get("/photography", limiter, async (req, res) => {
   try {
     const data = await Model.find({ type: "Photography" });
     res.json(data);
@@ -133,7 +141,7 @@ router.get("/photography", async (req, res) => {
   }
 });
 
-router.get("/event", async (req, res) => {
+router.get("/event", limiter, async (req, res) => {
   try {
     const data = await Model.find({ type: "Event" });
     res.json(data);
@@ -143,7 +151,7 @@ router.get("/event", async (req, res) => {
 });
 
 //Get by ID Method
-router.get("/getOne/:id", async (req, res) => {
+router.get("/getOne/:id", limiter, async (req, res) => {
   try {
     const data = await Model.findById(req.params.id);
     res.json(data);
@@ -153,7 +161,7 @@ router.get("/getOne/:id", async (req, res) => {
 });
 
 //Update by ID Method
-router.post("/update/:id", async (req, res) => {
+router.post("/update/:id", limiter, async (req, res) => {
   try {
     const id = req.params.id;
     const updatedData = req.body;
@@ -168,7 +176,7 @@ router.post("/update/:id", async (req, res) => {
 });
 
 //Delete by ID Method
-router.get("/delete/:id", async (req, res) => {
+router.get("/delete/:id", limiter, async (req, res) => {
   try {
     const id = req.params.id;
     const data = await Model.findByIdAndDelete(id);
