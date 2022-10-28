@@ -14,7 +14,7 @@ const dataSchema = new mongoose.Schema({
     type: String,
   },
   img: {
-    data: Buffer,
+    data: String,
     contentType: String,
   },
 });
