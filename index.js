@@ -1,12 +1,13 @@
 const express = require("express");
 var bodyParser = require("body-parser");
+const morgan = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
 const session = require("express-session");
 const routesApi = require("./routes/routesApi");
 const routersPublic = require("./routes/routesPublic");
 var history = require("connect-history-api-fallback");
+require("dotenv").config();
 
 const app = express();
 app.use(
@@ -14,6 +15,8 @@ app.use(
     origin: "*",
   })
 );
+
+app.use(morgan("dev"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
