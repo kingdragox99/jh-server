@@ -87,7 +87,7 @@
           methods: {
             async fetchData() {
               this.loading = !0;
-              const e = await fetch("http://localhost:3000/api/engraving");
+              const e = await fetch("http://5.196.7.243:3000/api/i/engraving");
               (this.data = await e.json()), (this.loading = !1);
             },
           },

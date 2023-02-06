@@ -87,7 +87,7 @@
           methods: {
             async fetchData() {
               this.loading = !0;
-              const t = await fetch("http://localhost:3000/api/photography");
+              const t = await fetch("http://5.196.7.243:3000/api/photography");
               (this.data = await t.json()), (this.loading = !1);
             },
           },
