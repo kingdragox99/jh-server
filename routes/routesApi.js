@@ -35,6 +35,7 @@ router.get("/admin", limiter, (req, res) => {
         res.status(500).send("An error occurred", err);
       } else {
         res.render("home", { items: items, user: req.session.user });
+        console.log(req.session);
       }
     });
   } else {
@@ -57,6 +58,7 @@ router.post("/login", (req, res) => {
     req.body.password == tophidden.password
   ) {
     req.session.user = req.body.email;
+    req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
     res.redirect("/api/admin");
   } else {
     res.render("login", { error: "Bad password or Email" });
@@ -80,7 +82,7 @@ router.post("/post", limiter, upload.single("image"), (req, res, next) => {
     desc: req.body.desc,
     type: req.body.type,
     img: {
-      data: "https://joyce-huberty.onrender.com/img/" + req.file.filename,
+      data: "/img/" + req.file.filename,
       contentType: "image/jpg",
     },
   };

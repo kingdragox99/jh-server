@@ -52,5 +52,5 @@ app.use(express.static("public"));
 app.use("/img", express.static(__dirname + "/img"));
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server Started at ${process.env.PORT}`);
+  console.log(`Server Started at http://localhost:${process.env.PORT}`);
 });
